@@ -1,0 +1,65 @@
+<h2>Administración nacional / centros</h2>
+
+  <div *ngIf="!account">
+    <button (click)="connect()">🔑 Conectar wallet</button>
+  </div>
+  <div *ngIf="account"><p>Conectado: <code>{{account}}</code></p></div>
+
+  <p>Elección actual: <b>{{electionId || 'Ninguna'}}</b></p>
+
+  <button (click)="syncRoot()">Sincronizar Merkle root desde RNP</button>
+  <hr />
+
+  <h3>Candidatos</h3>
+  <div>
+    <input [(ngModel)]="newCandidate" placeholder="Nombre de candidato" />
+    <button (click)="addCandidate()">Añadir</button>
+    <button (click)="clearCandidates()">Limpiar lista</button>
+  </div>
+
+  <ul>
+    <li *ngFor="let c of candidates; trackBy: trackById">
+      <b>#{{c.id}} {{c.name}}</b> — votos: {{c.voteCount}}<br />
+      <small>Imagen URL:</small>
+      <input [(ngModel)]="images[c.id]" placeholder="https://..." size="60" />
+    </li>
+  </ul>
+  <button (click)="saveImages()">💾 Guardar imágenes</button>
+
+  <hr />
+
+  <h3>Iniciar elección</h3>
+  <label>
+    <input type="checkbox" [(ngModel)]="replaceCandidates" />
+    Reemplazar con la lista (uno por línea):
+  </label><br />
+  <textarea [(ngModel)]="newCandidatesMultiline" rows="4" cols="70" [disabled]="!replaceCandidates"></textarea><br />
+  <button (click)="startElection()">🚀 Iniciar elección</button>
+
+  <hr />
+
+  <h3>Centros y Mesas</h3>
+  <div>
+    <label>Center ID:</label> <input type="number" [(ngModel)]="centerId" />
+    <label>Nombre:</label> <input [(ngModel)]="centerName" />
+    <button (click)="registerCenter()">Registrar centro</button>
+  </div>
+
+  <div style="margin-top:8px;">
+    <label>Admin (address):</label> <input [(ngModel)]="centerAdminAddr" size="50" />
+    <button (click)="setCenterAdmin()">Asignar admin del centro</button>
+  </div>
+
+  <div style="margin-top:8px;">
+    <label>Mesa ID:</label> <input type="number" [(ngModel)]="mesaId" />
+    <button (click)="calcRoot()">Calcular root (RNP)</button>
+    <input [(ngModel)]="root" placeholder="0x...64hex" size="70" />
+    <button (click)="setRoot()">Fijar root</button>
+  </div>
+
+  <div style="margin-top:8px;">
+    <button (click)="openCenter()">🟢 Abrir centro</button>
+    <button (click)="closeCenter()">🔴 Cerrar centro</button>
+  </div>
+
+  <p *ngIf="status" style="margin-top:12px;font-weight:600">{{status}}</p>
