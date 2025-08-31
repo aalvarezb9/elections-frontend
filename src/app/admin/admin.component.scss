@@ -1,0 +1,108 @@
+.admin-wrapper {
+    padding: 20px;
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+  
+  .card {
+    border-radius: 16px;
+  }
+  
+  .row {
+    display: grid;
+    gap: 12px;
+  }
+  
+  .stack {
+    display: grid;
+    gap: 6px;
+    align-items: center;
+  }
+  
+  .grow { width: 100%; }
+  .full { width: 100%; }
+  
+  .gap { gap: 12px; }
+  
+  .end, .end-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  .sp { margin: 12px 0; }
+  
+  .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    background: #f3f6fa;
+    padding: 2px 6px;
+    border-radius: 6px;
+  }
+  
+  .cand-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+  
+  .cand-item {
+    padding: 12px;
+    border-radius: 12px;
+  }
+  
+  .cand-head {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  
+  .chip {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #e3f2fd;
+    color: #1565c0;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .name { font-weight: 600; }
+  .votes { opacity: .8; }
+  
+  .grid2 {
+    grid-template-columns: 1fr 2fr auto;
+    align-items: end;
+  }
+  
+  .grid1-2 {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+  
+  .grid3 {
+    grid-template-columns: 160px auto 1fr auto;
+    align-items: end;
+  }
+  
+  .actions-row {
+    align-items: end;
+  }
+  
+  .status {
+    margin-top: 14px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #f1f8e9;
+    color: #2e7d32;
+    font-weight: 600;
+  }
+  
+  /* responsive */
+  @media (max-width: 900px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .grid1-2 { grid-template-columns: 1fr; }
+    .grid3 { grid-template-columns: 1fr; }
+  }
+  

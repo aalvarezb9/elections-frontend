@@ -2,11 +2,27 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Web3Service, Candidate } from '../services/web3.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatRippleModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-votacion',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    MatCardModule, 
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatRadioModule,
+    MatRippleModule],
   templateUrl: './votacion.component.html'
 })
 export class VotacionComponent implements OnInit, OnDestroy {
@@ -22,7 +38,7 @@ export class VotacionComponent implements OnInit, OnDestroy {
 
   trackById = (_: number, c: Candidate) => c.id;
 
-  constructor(public web3: Web3Service) {}
+  constructor(public web3: Web3Service) { }
 
   async ngOnInit() {
     try {
@@ -31,14 +47,14 @@ export class VotacionComponent implements OnInit, OnDestroy {
         const c = this.candidates.find(x => x.id === candId);
         if (c) c.voteCount = newTotal;
       });
-    } catch (e:any) {
+    } catch (e: any) {
       this.msg = 'Error cargando datos: ' + (e?.message || e);
       console.error(e);
     }
   }
 
-  ngOnDestroy() { 
-    this.web3.offVote(); 
+  ngOnDestroy() {
+    this.web3.offVote();
   }
 
   private async loadData() {

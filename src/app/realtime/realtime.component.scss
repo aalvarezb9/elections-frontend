@@ -1,0 +1,16 @@
+.results-wrap { max-width: 1100px; margin: 16px auto; padding: 12px; }
+.spacer { flex: 1 1 auto; }
+.summary { border-radius: 16px; margin-bottom: 16px; }
+.summary-row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; font-size: 15px; }
+.mono, code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background: #f3f6fa; padding: 2px 6px; border-radius: 6px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.cand-card { border-radius: 16px; overflow: hidden; transition: transform .15s ease, box-shadow .2s ease; }
+.cand-card:hover { transform: translateY(-2px); box-shadow: var(--mat-elevation-z6); }
+.row-top { display: grid; grid-template-columns: 1fr auto; align-items: center; margin: 6px 0 8px; }
+.name { font-weight: 600; letter-spacing: .2px; }
+.votes { opacity: .75; font-size: .92rem; }
+.pct-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: .92rem; }
+.chart-card { border-radius: 16px; }
+.chart-header { font-weight: 600; margin-bottom: 8px; }
+.chart-box { position: relative; width: 100%; height: 420px; }
+@media (max-width: 640px) { .summary-row { grid-template-columns: 1fr; } .chart-box { height: 360px; } }

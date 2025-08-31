@@ -1,29 +1,62 @@
-<div class="container" style="max-width: 720px; margin: 0 auto;">
-  <h2>Votación</h2>
+<div class="vote-wrapper">
+  <mat-card class="container mat-elevation-z6">
+    <mat-card-header>
+      <mat-card-title>Votación</mat-card-title>
+      <mat-card-subtitle>Tu voto es anónimo en esta demo</mat-card-subtitle>
+    </mat-card-header>
 
-  <div class="card">
-    <label>DNI</label>
-    <input [(ngModel)]="dni" placeholder="DNI" />
+    <mat-card-content>
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>DNI</mat-label>
+          <input matInput [(ngModel)]="dni" placeholder="Ej. 0801-xxxx-xxxxx" />
+          <mat-icon matSuffix>badge</mat-icon>
+        </mat-form-field>
 
-    <label>Huella (demo)</label>
-    <input [(ngModel)]="fingerprint" placeholder="Huella simulada" />
-  </div>
-
-  <h3>Selecciona tu candidato</h3>
-  <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 12px;">
-    <label *ngFor="let c of candidates; trackBy: trackById">
-      <div (click)="selectedId = c.id"
-           [style.border]="selectedId===c.id ? '2px solid #1e90ff' : '1px solid #ccc'"
-           style="border-radius: 10px; padding: 8px; cursor: pointer; text-align: center;">
-        <img [src]="imgFor(c)" alt="" style="width: 100%; max-height: 140px; object-fit: cover; border-radius: 8px;" />
-        <div style="margin-top: 6px; font-weight: 600;">{{ c.name }}</div>
-        <small>Votos: {{ c.voteCount }}</small>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Huella (demo)</mat-label>
+          <input matInput [(ngModel)]="fingerprint" placeholder="Huella simulada" />
+          <mat-icon matSuffix>fingerprint</mat-icon>
+        </mat-form-field>
       </div>
-      <input type="radio" name="cand" [checked]="selectedId===c.id" style="display:none" />
-    </label>
-  </div>
 
-  <button (click)="vote()" style="margin-top: 16px;">Votar</button>
+      <h3 class="section-title">Selecciona tu candidato</h3>
 
-  <p style="margin-top: 12px;" [style.color]="msg.startsWith('✅') ? 'green' : 'crimson'">{{ msg }}</p>
+      <div class="grid">
+        <mat-card
+          class="cand-card mat-elevation-z2"
+          *ngFor="let c of candidates; trackBy: trackById"
+          [class.selected]="selectedId===c.id"
+          matRipple
+          (click)="selectedId = c.id"
+        >
+          <div class="thumb">
+            <img [src]="imgFor(c)" alt="{{ c.name }}" />
+          </div>
+
+          <div class="info">
+            <div class="name">{{ c.name }}</div>
+            <div class="votes">Votos: {{ c.voteCount }}</div>
+          </div>
+
+          <mat-radio-button class="sr-only" [checked]="selectedId===c.id"></mat-radio-button>
+        </mat-card>
+      </div>
+
+      <div class="actions">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="vote()"
+          [disabled]="!dni || !fingerprint || !selectedId"
+        >
+          Votar
+        </button>
+
+        <div class="msg" [class.ok]="msg.startsWith('✅')" [class.err]="!msg.startsWith('✅')">
+          {{ msg }}
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

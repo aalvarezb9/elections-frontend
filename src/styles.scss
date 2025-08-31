@@ -1,1 +1,134 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+:root {
+    --container-max: 880px;
+  }
+  
+  body {
+    background: radial-gradient(circle at 20% 10%, #e3f2fd 0, transparent 40%),
+                radial-gradient(circle at 80% 0, #f3e5f5 0, transparent 35%),
+                linear-gradient(180deg, #fafafa, #f5f5f5);
+    min-height: 100vh;
+  }
+  
+  .vote-wrapper {
+    padding: 24px;
+    display: grid;
+    place-items: center;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: var(--container-max);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+  
+  mat-card-header {
+    padding-bottom: 0;
+  }
+  
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 8px 0 12px;
+  }
+  .field { width: 100%; }
+  
+  .section-title {
+    margin: 12px 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+  }
+  
+  .cand-card {
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease;
+    border: 1px solid rgba(0,0,0,0.06);
+    background: white;
+    display: grid;
+    grid-template-rows: 140px auto;
+  }
+  .cand-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--mat-elevation-z6);
+  }
+  .cand-card.selected {
+    border-color: #1e88e5;
+    box-shadow: 0 0 0 3px rgba(30,136,229,.12), var(--mat-elevation-z8);
+  }
+  
+  .cand-card .thumb {
+    overflow: hidden;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+  .cand-card .thumb img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+    transition: transform .3s ease;
+  }
+  .cand-card:hover .thumb img {
+    transform: scale(1.03);
+  }
+  
+  .cand-card .info {
+    padding: 10px 12px 12px;
+    display: grid;
+    gap: 4px;
+  }
+  .cand-card .name {
+    font-weight: 600;
+    letter-spacing: .2px;
+  }
+  .cand-card .votes {
+    font-size: .85rem;
+    opacity: .75;
+  }
+  
+  .actions {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  
+  .msg {
+    justify-self: start;
+    font-size: .95rem;
+  }
+  .msg.ok { color: #2e7d32; }
+  .msg.err { color: #c62828; }
+  
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    border: 0; padding: 0; margin: -1px;
+  }
+
+  button {
+    border-radius: 10px;
+  }
+  
+  /* responsive */
+  @media (max-width: 680px) {
+    .form-row { grid-template-columns: 1fr; }
+  }

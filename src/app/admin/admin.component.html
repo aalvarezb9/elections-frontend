@@ -1,65 +1,205 @@
-<h2>Administración nacional / centros</h2>
+<mat-toolbar color="primary" class="mat-elevation-z4">
+  <span>Administración nacional / centros</span>
+</mat-toolbar>
 
-  <div *ngIf="!account">
-    <button (click)="connect()">🔑 Conectar wallet</button>
-  </div>
-  <div *ngIf="account"><p>Conectado: <code>{{account}}</code></p></div>
+<div class="admin-wrapper">
+  <mat-accordion multi>
 
-  <p>Elección actual: <b>{{electionId || 'Ninguna'}}</b></p>
+    <mat-expansion-panel expanded>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Conexión y estado</mat-panel-title>
+      </mat-expansion-panel-header>
 
-  <button (click)="syncRoot()">Sincronizar Merkle root desde RNP</button>
-  <hr />
+      <div class="row">
+        <mat-card class="card">
+          <mat-card-content>
+            <div *ngIf="!account" class="stack">
+              <button mat-raised-button color="primary" (click)="connect()">
+                <mat-icon>vpn_key</mat-icon> Conectar wallet
+              </button>
+            </div>
+            <div *ngIf="account" class="stack">
+              <span>Conectado:</span>
+              <code class="mono">{{ account }}</code>
+            </div>
 
-  <h3>Candidatos</h3>
-  <div>
-    <input [(ngModel)]="newCandidate" placeholder="Nombre de candidato" />
-    <button (click)="addCandidate()">Añadir</button>
-    <button (click)="clearCandidates()">Limpiar lista</button>
-  </div>
+            <mat-divider class="sp"></mat-divider>
 
-  <ul>
-    <li *ngFor="let c of candidates; trackBy: trackById">
-      <b>#{{c.id}} {{c.name}}</b> — votos: {{c.voteCount}}<br />
-      <small>Imagen URL:</small>
-      <input [(ngModel)]="images[c.id]" placeholder="https://..." size="60" />
-    </li>
-  </ul>
-  <button (click)="saveImages()">💾 Guardar imágenes</button>
+            <div class="stack">
+              <span>Elección actual: <span class="mono">{{ electionId || 'Ninguna' }}</span></span>
+              <br>
+              <button mat-stroked-button color="primary" (click)="syncRoot()">
+                <mat-icon>sync</mat-icon> Sincronizar Merkle root desde RNP
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-expansion-panel>
 
-  <hr />
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Candidatos</mat-panel-title>
+      </mat-expansion-panel-header>
 
-  <h3>Iniciar elección</h3>
-  <label>
-    <input type="checkbox" [(ngModel)]="replaceCandidates" />
-    Reemplazar con la lista (uno por línea):
-  </label><br />
-  <textarea [(ngModel)]="newCandidatesMultiline" rows="4" cols="70" [disabled]="!replaceCandidates"></textarea><br />
-  <button (click)="startElection()">🚀 Iniciar elección</button>
+      <mat-card class="card">
+        <mat-card-content>
+          <div class="row gap">
+            <mat-form-field appearance="outline" class="grow">
+              <mat-label>Nombre de candidato</mat-label>
+              <input matInput [(ngModel)]="newCandidate" placeholder="Ej. Ana Pérez" />
+            </mat-form-field>
 
-  <hr />
+            <button mat-raised-button color="primary" (click)="addCandidate()">
+              <mat-icon>person_add</mat-icon> Añadir
+            </button>
+            <button mat-button color="warn" (click)="clearCandidates()">
+              <mat-icon>clear_all</mat-icon> Limpiar lista
+            </button>
+          </div>
 
-  <h3>Centros y Mesas</h3>
-  <div>
-    <label>Center ID:</label> <input type="number" [(ngModel)]="centerId" />
-    <label>Nombre:</label> <input [(ngModel)]="centerName" />
-    <button (click)="registerCenter()">Registrar centro</button>
-  </div>
+          <div class="cand-list">
+            <mat-card class="cand-item mat-elevation-z1" *ngFor="let c of candidates; trackBy: trackById">
+              <div class="cand-head">
+                <span class="chip">#{{ c.id }}</span>
+                <span class="name">{{ c.name }}</span>
+                <span class="votes">Votos: {{ c.voteCount }}</span>
+              </div>
 
-  <div style="margin-top:8px;">
-    <label>Admin (address):</label> <input [(ngModel)]="centerAdminAddr" size="50" />
-    <button (click)="setCenterAdmin()">Asignar admin del centro</button>
-  </div>
+              <mat-form-field appearance="fill" class="full">
+                <mat-label>Imagen URL</mat-label>
+                <input matInput [(ngModel)]="images[c.id]" placeholder="https://..." />
+                <mat-icon matSuffix>image</mat-icon>
+              </mat-form-field>
+            </mat-card>
+          </div>
 
-  <div style="margin-top:8px;">
-    <label>Mesa ID:</label> <input type="number" [(ngModel)]="mesaId" />
-    <button (click)="calcRoot()">Calcular root (RNP)</button>
-    <input [(ngModel)]="root" placeholder="0x...64hex" size="70" />
-    <button (click)="setRoot()">Fijar root</button>
-  </div>
+          <div class="end">
+            <button mat-raised-button color="accent" (click)="saveImages()">
+              <mat-icon>save</mat-icon> Guardar imágenes
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-expansion-panel>
 
-  <div style="margin-top:8px;">
-    <button (click)="openCenter()">🟢 Abrir centro</button>
-    <button (click)="closeCenter()">🔴 Cerrar centro</button>
-  </div>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Iniciar elección</mat-panel-title>
+      </mat-expansion-panel-header>
 
-  <p *ngIf="status" style="margin-top:12px;font-weight:600">{{status}}</p>
+      <mat-card class="card">
+        <mat-card-content>
+          <div class="row gap">
+            <mat-checkbox [(ngModel)]="replaceCandidates">
+              Reemplazar con la lista (uno por línea)
+            </mat-checkbox>
+          </div>
+
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>Listado de candidatos</mat-label>
+            <textarea
+              matInput rows="5"
+              [(ngModel)]="newCandidatesMultiline"
+              [disabled]="!replaceCandidates"
+              placeholder="Ana Pérez&#10;Luis Gómez&#10;María Castro"
+            ></textarea>
+          </mat-form-field>
+
+          <div class="end">
+            <button mat-raised-button color="primary" (click)="startElection()">
+              <mat-icon>rocket_launch</mat-icon> Iniciar elección
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>Centros y mesas</mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <mat-card class="card">
+        <mat-card-content>
+
+          <div class="row grid2">
+            <mat-form-field appearance="outline">
+              <mat-label>Center ID</mat-label>
+              <input matInput type="number" [(ngModel)]="centerId" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre</mat-label>
+              <input matInput [(ngModel)]="centerName" />
+            </mat-form-field>
+
+            <div class="end-row">
+              <button mat-raised-button color="primary" (click)="registerCenter()">
+                <mat-icon>domain_add</mat-icon> Registrar centro
+              </button>
+            </div>
+          </div>
+
+          <mat-divider class="sp"></mat-divider>
+
+          <div class="row grid1-2">
+            <mat-form-field appearance="outline" class="full">
+              <mat-label>Admin del centro (address)</mat-label>
+              <input matInput [(ngModel)]="centerAdminAddr" />
+            </mat-form-field>
+
+            <div class="end-row">
+              <button mat-stroked-button color="primary" (click)="setCenterAdmin()">
+                <mat-icon>admin_panel_settings</mat-icon> Asignar admin del centro
+              </button>
+            </div>
+          </div>
+
+          <mat-divider class="sp"></mat-divider>
+
+          <div class="row grid3">
+            <mat-form-field appearance="outline">
+              <mat-label>Mesa ID</mat-label>
+              <input matInput type="number" [(ngModel)]="mesaId" />
+            </mat-form-field>
+
+            <div class="row actions-row">
+              <button mat-button (click)="calcRoot()">
+                <mat-icon>calculate</mat-icon> Calcular root (RNP)
+              </button>
+            </div>
+
+            <mat-form-field appearance="fill" class="full">
+              <mat-label>Merkle root</mat-label>
+              <input matInput [(ngModel)]="root" placeholder="0x...64hex" />
+            </mat-form-field>
+
+            <div class="end-row">
+              <button mat-raised-button color="accent" (click)="setRoot()">
+                <mat-icon>task_alt</mat-icon> Fijar root
+              </button>
+            </div>
+          </div>
+
+          <mat-divider class="sp"></mat-divider>
+
+          <div class="row gap">
+            <button mat-raised-button color="primary" (click)="openCenter()">
+              <mat-icon>play_arrow</mat-icon> Abrir centro
+            </button>
+            <button mat-raised-button color="warn" (click)="closeCenter()">
+              <mat-icon>stop_circle</mat-icon> Cerrar centro
+            </button>
+          </div>
+
+          <div *ngIf="status" class="status">
+            {{ status }}
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</div>

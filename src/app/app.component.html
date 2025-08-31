@@ -1,9 +1,56 @@
-<header style="padding:12px; border-bottom:1px solid #e5e7eb; display:flex; gap:16px;">
-  <a routerLink="/" routerLinkActive="active">Inicio</a>
-  <a routerLink="/admin" routerLinkActive="active">Administración</a>
-  <a routerLink="/votacion" routerLinkActive="active">Votación</a>
-  <a routerLink="/realtime" routerLinkActive="active">Tiempo real</a>
-</header>
+<mat-toolbar class="app-toolbar mat-elevation-z4" color="primary">
+  <button mat-icon-button
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          aria-label="Inicio">
+    <mat-icon>how_to_vote</mat-icon>
+  </button>
+
+  <span class="brand">Elecciones</span>
+  <span class="spacer"></span>
+
+  <nav class="nav">
+    <a mat-button
+       routerLink="/"
+       routerLinkActive="active"
+       [routerLinkActiveOptions]="{ exact: true }">
+      <mat-icon>home</mat-icon> Inicio
+    </a>
+    <a mat-button routerLink="/admin" routerLinkActive="active">
+      <mat-icon>admin_panel_settings</mat-icon> Administración
+    </a>
+    <a mat-button routerLink="/votacion" routerLinkActive="active">
+      <mat-icon>how_to_reg</mat-icon> Votación
+    </a>
+    <a mat-button routerLink="/realtime" routerLinkActive="active">
+      <mat-icon>query_stats</mat-icon> Tiempo real
+    </a>
+  </nav>
+
+  <button mat-icon-button class="mobile-menu" [matMenuTriggerFor]="menu" aria-label="Menú">
+    <mat-icon>menu</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-menu #menu="matMenu">
+  <button mat-menu-item
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">
+    <mat-icon>home</mat-icon><span>Inicio</span>
+  </button>
+  <button mat-menu-item routerLink="/admin" routerLinkActive="active">
+    <mat-icon>admin_panel_settings</mat-icon><span>Administración</span>
+  </button>
+  <button mat-menu-item routerLink="/votacion" routerLinkActive="active">
+    <mat-icon>how_to_reg</mat-icon><span>Votación</span>
+  </button>
+  <button mat-menu-item routerLink="/realtime" routerLinkActive="active">
+    <mat-icon>query_stats</mat-icon><span>Tiempo real</span>
+  </button>
+</mat-menu>
+
 <main style="padding:16px;">
   <router-outlet></router-outlet>
 </main>
