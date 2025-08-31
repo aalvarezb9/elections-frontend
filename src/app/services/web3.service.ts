@@ -2,11 +2,13 @@
 import { Injectable } from '@angular/core';
 import { ethers } from 'ethers';
 import contractInfo from '../../assets/contract.json';
+import { Proof } from './rnp.service';
 
 export interface Candidate {
   id: number;
   name: string;
   voteCount: number;
+  imageURI?: string;
 }
 
 export interface OnChainVote {
@@ -114,6 +116,7 @@ export class Web3Service {
       id: (t.id ?? t[0]).toNumber(),
       name: t.name ?? t[1],
       voteCount: (t.voteCount ?? t[2]).toNumber(),
+      imageURI: t.imageURI ?? t[3],
     }));
   }
 
@@ -154,6 +157,15 @@ export class Web3Service {
     if (!r.ok) throw new Error(await r.text());
     const j = await r.json();
     return String(j.txHash);
+  }
+
+  async voteRelayer(candidateId: number, proof: Proof): Promise<{txHash: string}> {
+    const r = await fetch(`${this.RELAYER_URL}/vote`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ candidateId, ...proof })
+    });
+    return r.json();
   }
   
   async syncRootFromRNP(): Promise<{root: string, txHash: string}> {

@@ -9,6 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatRippleModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { RnpService } from '../services/rnp.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-votacion',
@@ -38,7 +40,7 @@ export class VotacionComponent implements OnInit, OnDestroy {
 
   trackById = (_: number, c: Candidate) => c.id;
 
-  constructor(public web3: Web3Service) { }
+  constructor(public web3: Web3Service, public rnp: RnpService) { }
 
   async ngOnInit() {
     try {
@@ -60,6 +62,7 @@ export class VotacionComponent implements OnInit, OnDestroy {
   private async loadData() {
     this.electionId = await this.web3.currentElectionId();
     this.candidates = await this.web3.getAllCandidates();
+    console.log('candidates', this.candidates);
     this.images = await this.web3.getCandidateMeta(this.electionId || 0);
     if (this.candidates.length) this.selectedId = this.candidates[0].id;
   }
@@ -71,12 +74,33 @@ export class VotacionComponent implements OnInit, OnDestroy {
       return;
     }
     try {
-      const tx = await this.web3.voteRelayerSimple(this.dni, this.fingerprint, this.selectedId);
-      this.msg = '✅ Voto emitido. TX: ' + tx;
+      const proof = await this.rnp.getProof(this.dni, this.fingerprint);
+      const tx = await this.web3.voteRelayer(this.selectedId, proof);
+      if (!tx.txHash) {
+        this.showError('Error al emitir el voto');
+        return;
+      }
+      this.showSuccess('Voto emitido');
     } catch (e: any) {
-      this.msg = '❌ ' + (e?.message || 'Error de red');
+      this.showError(e?.message || 'Error al votar');
     }
   }
 
   imgFor(c: Candidate) { return this.images[c.id] || 'assets/placeholder.png'; }
+
+  showError(error: string) {
+    Swal.fire({
+      title: 'Error',
+      text: error,
+      icon: 'error'
+    });
+  }
+
+  showSuccess(message: string) {
+    Swal.fire({
+      title: 'Success',
+      text: message,
+      icon: 'success'
+    });
+  }
 }

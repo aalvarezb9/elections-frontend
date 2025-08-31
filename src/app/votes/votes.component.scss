@@ -1,0 +1,27 @@
+.content {
+    padding: 16px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.vote-card img {
+    object-fit: cover;
+    max-height: 160px;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40vh;
+}
+
+.empty {
+    text-align: center;
+    color: #666;
+    margin-top: 24px;
+}

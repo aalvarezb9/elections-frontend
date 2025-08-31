@@ -41,11 +41,29 @@ export class RealtimeComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this.loadInitial();
+    // Para evitar demasiadas actualizaciones del gráfico por muchas notificaciones por segundo,
+    // agrupamos las actualizaciones y actualizamos el gráfico como máximo cada 200ms.
+    let updatePending = false;
+    let lastUpdate = 0;
+    const UPDATE_INTERVAL = 5000; // ms
+
     this.web3.onVote((_eId, candId, newTotal) => {
       const c = this.candidates.find(x => x.id === candId);
       if (c) c.voteCount = newTotal;
       this.computeTotal();
-      this.updateChart();
+
+      const now = Date.now();
+      if (!updatePending && now - lastUpdate > UPDATE_INTERVAL) {
+        this.updateChart();
+        lastUpdate = now;
+      } else if (!updatePending) {
+        updatePending = true;
+        setTimeout(() => {
+          this.updateChart();
+          lastUpdate = Date.now();
+          updatePending = false;
+        }, UPDATE_INTERVAL);
+      }
     });
   }
 

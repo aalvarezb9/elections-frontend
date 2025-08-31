@@ -22,11 +22,11 @@
   </mat-card>
 
   <!-- Lista -->
-  <ng-container *ngIf="view === 'list'; else chartView">
+  <ng-container *ngIf="chartView && view === 'list'; else chartView">
     <div class="cards">
       <mat-card class="cand-card mat-elevation-z2"
                 *ngFor="let c of candidates; trackBy: trackById">
-        <img mat-card-image [src]="imgFor(c)" alt="{{ c.name }}" />
+        <img mat-card-image [src]="c.imageURI" alt="{{ c.name }}" style="height: 100px; width: 100px;" />
         <mat-card-content>
           <div class="row-top">
             <div class="name">{{ c.name }}</div>

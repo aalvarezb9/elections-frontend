@@ -3,11 +3,13 @@ import { AdminComponent } from './admin/admin.component';
 import { VotacionComponent } from './votacion/votacion.component';
 import { RealtimeComponent } from './realtime/realtime.component';
 import { HomeComponent } from './home.component';
+import { VotesComponent } from './votes/votes.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'admin', component: AdminComponent },
   { path: 'votacion', component: VotacionComponent },
   { path: 'realtime', component: RealtimeComponent },
+  { path: 'votes', component: VotesComponent },
   { path: '**', redirectTo: '' }
 ];

@@ -1,0 +1,21 @@
+<mat-toolbar color="primary">Votos registrados</mat-toolbar>
+
+<div class="content" *ngIf="!loading(); else loadingTpl">
+    <div class="grid">
+        <mat-card class="vote-card" *ngFor="let v of cards()">
+            <img mat-card-image *ngIf="v.imageURI" [src]="v.imageURI" alt="{{v.candidateName}}">
+            <mat-card-content>
+                <h3>{{ v.candidateName }}</h3>
+                <p>Voto #{{ v.id }}</p>
+                <p>{{ v.timestamp * 1000 | date:'medium' }}</p>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <p class="empty" *ngIf="cards().length === 0">No hay votos aún.</p>
+</div>
+
+<ng-template #loadingTpl>
+    <div class="loading">
+        <mat-spinner diameter="40"></mat-spinner>
+    </div>
+</ng-template>

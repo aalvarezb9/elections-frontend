@@ -26,6 +26,9 @@
     <a mat-button routerLink="/realtime" routerLinkActive="active">
       <mat-icon>query_stats</mat-icon> Tiempo real
     </a>
+    <a mat-button routerLink="/votes" routerLinkActive="active">
+      <mat-icon>query_stats</mat-icon> Votos
+    </a>
   </nav>
 
   <button mat-icon-button class="mobile-menu" [matMenuTriggerFor]="menu" aria-label="Menú">
@@ -48,6 +51,12 @@
   </button>
   <button mat-menu-item routerLink="/realtime" routerLinkActive="active">
     <mat-icon>query_stats</mat-icon><span>Tiempo real</span>
+  </button>
+  <button mat-menu-item routerLink="/votes" routerLinkActive="active">
+    <mat-icon>query_stats</mat-icon><span>Votos</span>
+  </button>
+  <button mat-menu-item (click)="simulateVotes()">
+    <mat-icon>sync</mat-icon><span>Simular votos</span>
   </button>
 </mat-menu>
 
