@@ -9,6 +9,12 @@ export interface Candidate {
   voteCount: number;
 }
 
+export interface OnChainVote {
+  id: number;
+  candidateId: number;
+  timestamp: number; // epoch seconds (uint64 en contrato)
+}
+
 @Injectable({ providedIn: 'root' })
 export class Web3Service {
   private read = new ethers.providers.JsonRpcProvider('http://127.0.0.1:8545');
@@ -152,6 +158,43 @@ export class Web3Service {
   
   async syncRootFromRNP(): Promise<{root: string, txHash: string}> {
     const r = await fetch(`${this.RELAYER_URL}/admin/sync-root`, { method: 'POST' });
+    if (!r.ok) throw new Error(await r.text());
+    return r.json();
+  }
+
+  async listVotes(options?: { electionId?: number; start?: number; limit?: number }): Promise<{
+    electionId: number;
+    start: number;
+    limit: number;
+    total: number;
+    items: OnChainVote[];
+  }> {
+    const q = new URLSearchParams();
+    if (options?.electionId != null) q.set('electionId', String(options.electionId));
+    if (options?.start != null) q.set('start', String(options.start));
+    if (options?.limit != null) q.set('limit', String(options.limit));
+    const url = q.toString() ? `${this.RELAYER_URL}/votes?${q}` : `${this.RELAYER_URL}/votes`;
+    const r = await fetch(url);
+    if (!r.ok) throw new Error(await r.text());
+    return r.json();
+  }
+  
+  // Lista votos por candidato dentro de una elección
+  async listVotesByCandidate(electionId: number, candidateId: number, start = 0, limit = 50): Promise<{
+    electionId: number;
+    candidateId: number;
+    start: number;
+    limit: number;
+    total: number;
+    items: OnChainVote[];
+  }> {
+    const q = new URLSearchParams({
+      electionId: String(electionId),
+      candidateId: String(candidateId),
+      start: String(start),
+      limit: String(limit),
+    });
+    const r = await fetch(`${this.RELAYER_URL}/votes/by-candidate?${q}`);
     if (!r.ok) throw new Error(await r.text());
     return r.json();
   }

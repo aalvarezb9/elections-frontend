@@ -1,0 +1,97 @@
+<!-- generic-table.component.html -->
+<div class="table-container">
+    <h2>{{tableTitle}}</h2>
+    
+    <!-- Controles de filtro -->
+    <div class="filter-container" *ngIf="showSearch || showFilters">
+      <!-- Búsqueda de texto -->
+      <mat-form-field appearance="outline" class="filter-field" *ngIf="showSearch">
+        <mat-label>{{searchPlaceholder}}</mat-label>
+        <input matInput (keyup)="applyTextFilter($event)" [placeholder]="searchPlaceholder" class="search-input">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+  
+      <!-- Filtros dinámicos -->
+      <mat-form-field appearance="outline" class="filter-field" *ngFor="let filter of filterOptions">
+        <mat-label>{{filter.label}}</mat-label>
+        <mat-select [(value)]="selectedFilters[filter.key]" (selectionChange)="applyFilters()">
+          <mat-option *ngFor="let option of filter.options" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <!-- Botón limpiar filtros -->
+      <button mat-raised-button color="warn" (click)="clearFilters()" class="clear-button" *ngIf="showFilters && filterOptions.length > 0">
+        <mat-icon>clear</mat-icon>
+        Limpiar Filtros
+      </button>
+    </div>
+  
+    <!-- Tabla -->
+    <div class="mat-elevation-z8 table-wrapper">
+      <table mat-table [dataSource]="dataSource" matSort>
+        
+        <!-- Columnas dinámicas -->
+        <ng-container *ngFor="let column of columns" [matColumnDef]="column.key">
+          <th mat-header-cell *matHeaderCellDef
+              [style.width]="column.width"> 
+            {{column.label}} 
+          </th>
+          <td mat-cell *matCellDef="let element">
+            
+            <!-- Texto normal -->
+            <span *ngIf="!column.type || column.type === 'text'">
+              {{element[column.key]}}
+            </span>
+            
+            <!-- Número -->
+            <span *ngIf="column.type === 'number'">
+              {{element[column.key] | number}}
+            </span>
+            
+            <!-- Moneda -->
+            <span *ngIf="column.type === 'currency'">
+              {{element[column.key] | currency:'USD':'symbol':'1.0-0'}}
+            </span>
+            
+            <!-- Fecha -->
+            <span *ngIf="column.type === 'date'">
+              {{element[column.key] | date:'dd/MM/yyyy'}}
+            </span>
+            
+            <!-- Chip normal -->
+            <mat-chip *ngIf="column.type === 'chip'" [ngClass]="getChipClass(column, element[column.key])">
+              {{element[column.key]}}
+            </mat-chip>
+            
+            <!-- Chip de estado con icono -->
+            <mat-chip *ngIf="column.type === 'status'" [ngClass]="getChipClass(column, element[column.key])">
+              <mat-icon>{{getStatusIcon(element[column.key])}}</mat-icon>
+              {{element[column.key]}}
+            </mat-chip>
+            
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        
+        <!-- Mensaje cuando no hay datos -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+            No se encontraron datos que coincidan con los filtros aplicados
+          </td>
+        </tr>
+      </table>
+  
+      <!-- Paginador -->
+      <mat-paginator 
+        [pageSizeOptions]="pageSizeOptions" 
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 20, 50]"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  </div>
